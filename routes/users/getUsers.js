@@ -7,7 +7,7 @@ dotenv.config()
 
 export default async function getUsers(request, response) {
 	const id = request.params.id
-	const query = request.body.query
+	const query = request.body
 
 	const limit = parseInt(request.query.limit) || 100
 	const skip = parseInt(request.query.skip) || 0
@@ -15,7 +15,11 @@ export default async function getUsers(request, response) {
 	const userQuery = id ? { _id: ObjectId(id) } : query ? query : {}
 
 	try {
-		const users = await User.find(userQuery).limit(limit).skip(skip)
+		const users = await User.find(userQuery)
+			.limit(limit)
+			.skip(skip)
+			.populate('teams')
+			.populate('courses')
 		const length = await User.countDocuments(userQuery)
 
 		const nextLink =
@@ -46,5 +50,14 @@ export default async function getUsers(request, response) {
 			.status(200)
 			.send(id ? users[0] : presentation)
 			.end()
-	} catch (error) {}
+	} catch (error) {
+		console.log(error)
+		if (error._message) {
+			response.status(404).send({ message: 'User not found' }).end()
+
+			return
+		}
+
+		response.status(500).send({ message: 'Internal server error' }).end()
+	}
 }

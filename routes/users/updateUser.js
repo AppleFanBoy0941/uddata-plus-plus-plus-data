@@ -61,8 +61,6 @@ export default async function updateUser(request, response) {
 		}
 	})
 
-	console.log('update', update)
-
 	try {
 		const updatedUser = await User.findByIdAndUpdate(
 			request.params.id,

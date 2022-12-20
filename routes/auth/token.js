@@ -31,7 +31,7 @@ export default async function token(request, response) {
 			expiresIn: '2h',
 		})
 
-		response.status(200).send(newToken).end()
+		response.status(200).send({ token: newToken }).end()
 	} catch (error) {
 		console.log('Authentication token error', error)
 

@@ -5,7 +5,6 @@ import User from '../../models/user.model.js'
 export default async function createUser(request, response) {
 	if (!request.body || !request.body.first_name || !request.body.last_name) {
 		response.status(400).send('Missing information').end()
-		console.log(request.body)
 
 		return
 	}

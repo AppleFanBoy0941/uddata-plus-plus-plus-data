@@ -1,5 +1,4 @@
 export default function assignRoles(user, roles) {
-	console.log(user, roles)
 	const array = []
 
 	if (Object.keys(roles).length === 0) {
@@ -8,8 +7,6 @@ export default function assignRoles(user, roles) {
 
 	const role = user.role
 	const self = user.self
-
-	console.log('assign role', role, self)
 
 	if (self) {
 		const selfPrivileges = roles.self

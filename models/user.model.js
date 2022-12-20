@@ -72,6 +72,8 @@ const UserSchema = new Schema({
 			},
 		},
 	],
+	assignments: [{ type: Schema.Types.ObjectId, ref: 'Assignment' }],
+	attendance: [{ type: Schema.Types.ObjectId, ref: 'Attendance' }],
 	created_at: { type: Date, default: Date.now },
 	updated_at: { type: Date },
 })
