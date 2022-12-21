@@ -10,15 +10,16 @@ const AssignmentSchema = new Schema({
 	},
 	description: {
 		type: String,
-		required: true,
 		trim: true,
 	},
 	descriptionFile: FileSchema,
 	deadline: {
 		type: Date,
-		required: true,
+		default: Date.now,
 	},
 	students: [StudentAssignementSchema],
+	team: { type: Schema.Types.ObjectId, ref: 'Team', required: true },
+	course: { type: Schema.Types.ObjectId, ref: 'Course', required: true },
 })
 
 export default AssignmentSchema

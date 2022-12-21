@@ -1,10 +1,13 @@
 import bcrypt from 'bcrypt'
 import roleValidator from '../../functions/roleValidator.js'
 import User from '../../models/user.model.js'
+import isEmpty from '../../functions/isEmpty.js'
+import Team from '../../models/team.model.js'
+import Course from '../../models/course.model.js'
 
 export default async function createUser(request, response) {
-	if (!request.body || !request.body.first_name || !request.body.last_name) {
-		response.status(400).send('Missing information').end()
+	if (isEmpty(request.body)) {
+		response.status(400).send({ message: 'Missing information' }).end()
 
 		return
 	}
@@ -13,7 +16,7 @@ export default async function createUser(request, response) {
 	if (!user) {
 		response
 			.status(403)
-			.send('Invalid user, please get a new token and try again')
+			.send({ message: 'Invalid user, please get a new token and try again' })
 			.end()
 
 		return
@@ -22,7 +25,7 @@ export default async function createUser(request, response) {
 	if (!roleValidator(user.role, ['admin'])) {
 		response
 			.status(403)
-			.send('Unauthorized, you do not have rights for this action')
+			.send({ message: 'Unauthorized, you do not have rights for this action' })
 			.end()
 
 		return
@@ -45,6 +48,20 @@ export default async function createUser(request, response) {
 		})
 
 		user.save()
+
+		if (user.teams.length > 0) {
+			await Team.updateMany(
+				{ _id: { $in: user.teams } },
+				{ $push: { students: user._id } }
+			)
+		}
+
+		if (user.courses.length > 0) {
+			await Course.updateMany(
+				{ _id: { $in: user.courses } },
+				{ $push: { students: user._id } }
+			)
+		}
 
 		response.status(201).send(user).end()
 	} catch (error) {

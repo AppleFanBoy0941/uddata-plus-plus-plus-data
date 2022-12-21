@@ -14,7 +14,7 @@ export default async function updateUser(request, response) {
 	if (!user) {
 		response
 			.status(403)
-			.send('Invalid user, please get a new token and try again')
+			.send({ message: 'Invalid user, please get a new token and try again' })
 			.end()
 
 		return
@@ -90,7 +90,7 @@ export default async function updateUser(request, response) {
 
 		response
 			.status(500)
-			.send('Something went wrong, please try again later')
+			.send({ message: 'Something went wrong, please try again later' })
 			.end()
 
 		return

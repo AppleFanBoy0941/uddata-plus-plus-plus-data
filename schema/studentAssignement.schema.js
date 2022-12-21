@@ -3,7 +3,7 @@ import FileSchema from './file.schema.js'
 
 const StudentAssignementSchema = new Schema({
 	student: { type: Schema.Types.ObjectId, ref: 'User' },
-	file: FileSchema,
+	assignment: FileSchema,
 	grade: {
 		type: Number,
 		required: false,

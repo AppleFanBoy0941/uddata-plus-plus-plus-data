@@ -45,6 +45,13 @@ export default async function createTeam(request, response) {
 			)
 		}
 
+		if (team.teachers.length > 0) {
+			await User.updateMany(
+				{ _id: { $in: team.teachers } },
+				{ $push: { teams: team._id } }
+			)
+		}
+
 		response.status(201).send(team).end()
 
 		return
